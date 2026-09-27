@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #ffffff;
+  --fg: #0d0d0d;
+  --muted: #6b6b6b;
+  --subtle: #f4f4f4;
+  --border: #e5e5e5;
+  --popover: #ffffff;
+  --accent: #0d0d0d;
+  --accent-fg: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #212121;
+    --fg: #ececec;
+    --muted: #a3a3a3;
+    --subtle: #303030;
+    --border: #3a3a3a;
+    --popover: #2b2b2b;
+    --accent: #ececec;
+    --accent-fg: #0d0d0d;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-border: var(--border);
+  --color-popover: var(--popover);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+@keyframes word-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.word-in {
+  animation: word-in 180ms ease-out;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.caret {
+  animation: caret-blink 1s steps(1) infinite;
+}

@@ -1,0 +1,86 @@
+{
+  "$comment": "JevGPT vocabulary. Each group becomes one Jev Choice question (max 255 words per group). Words are space-separated; the same word may appear in more than one group (its probabilities are summed).",
+  "groups": [
+    {
+      "id": "chat",
+      "description": "a greeting, interjection, or conversational word (hello, thanks, sure, okay, wow)",
+      "words": "hello hi hey greetings welcome thanks thank sorry apologies please yes yeah yep no nope okay ok sure absolutely certainly definitely oh ah wow hmm well alright great cool nice awesome fantastic wonderful perfect indeed exactly right bye goodbye cheers congratulations oops alas hooray haha lol anyway gosh yay ugh phew bravo howdy farewell goodnight enjoy luck amen whoa aha huh eh uh um nah welp voila"
+    },
+    {
+      "id": "pronouns",
+      "description": "a pronoun, determiner, article, or contraction (I, you, the, a, this, it's, what)",
+      "words": "I me my mine myself you your yours yourself yourselves he him his himself she her hers herself it its itself we us our ours ourselves they them their theirs themselves this that these those a an the some any every each all no none many much more most few fewer less least several both either neither other others another such what which who whom whose whatever whoever whichever something anything nothing everything someone anyone everyone nobody somebody anybody everybody one ones there here I'm I've I'll I'd you're you've you'll you'd he's she's it's it'll we're we've we'll we'd they're they've they'll they'd that's there's here's what's who's where's how's let's own"
+    },
+    {
+      "id": "aux",
+      "description": "a helper verb, modal verb, or negation (is, are, was, can, will, would, don't, not)",
+      "words": "am is are was were be been being have has had having do does did can could will would shall should may might must ought not don't doesn't didn't isn't aren't wasn't weren't won't wouldn't can't couldn't shouldn't haven't hasn't hadn't mustn't gonna wanna gotta need needs get gets got getting become becomes became"
+    },
+    {
+      "id": "verbs",
+      "description": "a common action verb in base or -ing form (make, help, think, know, doing, going)",
+      "words": "make help think know see say go come take give find tell ask work seem feel try leave call keep let begin show hear play run move live believe hold bring happen write provide sit stand lose pay meet include continue set learn change lead understand watch follow stop create speak read allow add spend grow open walk win offer remember love consider appear buy wait serve expect build stay fall cut reach remain suggest raise pass sell require decide pull explain hope develop carry break receive agree support produce eat cover catch draw choose cause point listen realize place close compare describe discuss enjoy imagine improve increase answer share solve check fix plan use want look talk chat predict guess generate calculate compute process wonder wish dream laugh smile cry sing dance cook travel visit study teach test train design code debug deploy ship measure count sample rank score classify summarize translate respond reply recommend focus relax rest sleep wake drink drive ride fly swim climb explore discover invent pretend promise accept apply argue assume avoid care celebrate collect connect control copy deliver depend deserve doubt earn enter escape exist fail fill finish forget forgive gain handle hate hide ignore join jump manage matter mention miss mix notice order paint pick prepare prevent protect prove push reduce remove repeat replace return reveal save search select sort start switch thank throw touch trust turn vote wear do be like mean"
+    },
+    {
+      "id": "verb_forms",
+      "description": "a verb in past tense, past participle, or third-person -s form (made, said, thought, makes, seems)",
+      "words": "made helped thought knew known saw seen said went gone came took taken gave given found told asked worked seemed felt tried left called kept began begun showed shown heard played ran moved lived believed held brought happened wrote written provided sat stood lost paid met included continued learned changed led understood watched followed stopped created spoke spoken allowed added spent grew grown opened walked won offered remembered loved considered appeared bought waited served expected built stayed fell fallen reached remained suggested raised passed sold required decided pulled explained hoped developed carried broke broken received agreed supported produced ate eaten covered caught drew chose chosen caused pointed listened realized placed closed compared described discussed enjoyed imagined improved increased answered shared solved checked fixed planned used wanted looked talked predicted guessed generated calculated computed processed wondered wished dreamed laughed smiled cried sang danced cooked traveled visited studied taught tested trained designed coded shipped measured counted sampled ranked scored summarized translated replied recommended focused slept woke drank drove flew discovered invented promised accepted assumed connected delivered deserved earned failed finished forgot forgotten handled joined managed mattered mentioned missed noticed prepared protected proved pushed removed returned saved started switched thanked trusted turned done liked meant makes helps thinks knows sees says goes comes takes gives finds tells asks works seems feels tries means wants looks likes loves uses runs lives depends matters happens shows sounds sounded learns predicts guesses generates calculates chooses writes reads picks returns"
+    },
+    {
+      "id": "verbs_ing",
+      "description": "a verb ending in -ing (making, going, thinking, trying, helping)",
+      "words": "making helping thinking knowing seeing saying going coming taking giving finding telling asking working feeling trying playing running living writing learning changing watching creating reading waiting building explaining eating choosing answering sharing solving using looking talking chatting predicting guessing generating testing training coding debugging sampling starting doing"
+    },
+    {
+      "id": "nouns_everyday",
+      "description": "an everyday noun: people, places, animals, food, objects, nature (friend, city, dog, coffee)",
+      "words": "person people man woman men women child children kid kids friend friends family mother father mom dad parent parents brother sister baby boy girl guy guys team teacher student doctor human humans user users customer customers neighbor stranger king queen hero world home house room door window kitchen bed table chair car bus train plane road street city town country village place places school office shop store market restaurant cafe park garden beach ocean sea river lake mountain forest tree trees flower flowers grass sky sun moon star stars rain snow wind weather cloud clouds fire water air earth ground rock stone food bread coffee tea milk juice wine beer pizza cake cookie cookies apple apples banana orange egg eggs cheese rice soup chocolate sugar salt meal breakfast lunch dinner dog dogs cat cats bird birds fish horse cow mouse animal animals body head face eye eyes hand hands heart voice hair foot feet arm leg book books paper letter pen phone computer laptop screen keyboard camera picture photo movie music song songs game games ball toy gift money dollar dollars price bag box bottle cup glass plate key keys clothes shirt shoes hat coat bike boat ship map clock light lights color colors sound noise party wedding birthday holiday vacation trip journey weekend night sandwich pasta burger taco salad fruit vegetables experiment practice proof concept joke number nature mountains"
+    },
+    {
+      "id": "nouns_abstract",
+      "description": "an abstract, work, or technology noun (idea, problem, question, model, code, language)",
+      "words": "thing things idea ideas question questions answer answers problem problems solution solutions way ways reason reasons fact facts truth point points example examples part parts kind type types lot bit piece word words sentence sentences language languages text story stories name names life love moment chance choice choices decision decisions plan plans goal goals project projects job work task tasks business company product products service system systems model models data information knowledge research science math physics history art culture society government law power war peace health energy future past present experience experiences skill skills ability feature features option options result results effect effects impact change changes difference level levels rate value values cost quality risk issue issues error errors bug bugs mistake mistakes test tests code program programs software app apps website internet network server database file files function functions algorithm algorithms machine machines intelligence token tokens vocabulary probability probabilities prediction predictions guess guesses distribution sample samples temperature context memory attention prompt prompts output input response responses conversation conversations chat message messages reply replies assistant robot robots brain thought thoughts feeling feelings emotion emotions opinion opinions belief dream dreams hope fear joy fun happiness sadness kindness patience help advice tip tips secret secrets mystery magic surprise adventure challenge opportunity success failure progress process method approach step steps rule rules pattern patterns structure logic reasoning intuition sense meaning purpose universe space reality possibility mind theory evidence lesson course class meeting email news topic subject detail details list version update feedback support security privacy speed performance accuracy"
+    },
+    {
+      "id": "adjectives",
+      "description": "an adjective or color that describes something (good, new, happy, simple, blue)",
+      "words": "good better best bad worse worst great new old young big small large little long short high low tall early late last next same different important possible impossible real true false right wrong sure clear easy hard difficult simple complex fast quick slow strong weak hot cold warm cool happy sad angry afraid tired hungry busy free full empty closed safe dangerous rich poor cheap expensive beautiful ugly pretty nice lovely cute funny serious strange weird normal special common rare popular famous interesting boring exciting amazing awesome incredible fantastic terrible horrible wonderful perfect excellent fine okay brilliant clever smart wise stupid silly crazy curious careful helpful useful useless friendly kind gentle polite honest brave calm quiet loud bright dark heavy deep wide narrow thick thin clean dirty fresh sweet sour bitter salty spicy delicious tasty healthy sick alive dead ready able unable likely unlikely certain random probable uncertain confident accurate correct incorrect exact precise specific general personal private public social human natural artificial digital technical scientific creative logical magical mysterious ancient modern recent current final main major minor key basic advanced whole entire complete total single double various enough available necessary obvious similar familiar unique typical blue green red yellow black white orange purple pink brown gray golden glad excited proud lucky nervous worried surprised grateful thankful impressive awkward fun open lost limited calibrated typed intuitive sunny favorite surprising loyal independent"
+    },
+    {
+      "id": "adverbs",
+      "description": "an adverb (very, really, just, also, always, now, here, maybe, quickly)",
+      "words": "very really quite so too also just only even still already yet again always never often sometimes usually rarely maybe perhaps probably possibly certainly definitely actually basically honestly seriously literally totally completely absolutely mostly almost nearly exactly simply clearly obviously surely truly especially particularly generally quickly slowly carefully easily hardly barely finally suddenly immediately soon later now then everywhere somewhere anywhere nowhere away back forward together alone apart ahead instead otherwise however therefore thus moreover furthermore anyway meanwhile besides indeed rather pretty fairly well badly far once twice ever forever recently currently originally eventually naturally unfortunately fortunately hopefully luckily sadly happily kindly gladly thankfully interestingly surprisingly apparently essentially technically officially randomly statistically confidently up down out off around inside outside nearby online offline abroad here there not more less most else"
+    },
+    {
+      "id": "connectors",
+      "description": "a preposition, conjunction, or question word (of, in, with, and, but, because, how, why)",
+      "words": "of in on at to for with from by about as into like through after over between out against during without before under around among within along across behind beyond near toward towards upon above below beside besides since until till despite except per via versus plus minus unlike including regarding and or but so because if unless while whereas although though than whether when where why how nor yet once whenever wherever that then"
+    },
+    {
+      "id": "numbers",
+      "description": "a number, time, or date word (one, two, ten, first, today, week, Monday)",
+      "words": "zero one two three four five six seven eight nine ten eleven twelve thirteen fifteen twenty thirty forty fifty hundred thousand million billion trillion first second third fourth fifth last half quarter percent 0 1 2 3 4 5 6 7 8 9 10 100 42 1000 2026 time times day days week weeks month months year years hour hours minute minutes seconds today tomorrow yesterday tonight morning afternoon evening night Monday Tuesday Wednesday Thursday Friday Saturday Sunday January February March April May June July August September October November December spring summer autumn winter decade century era"
+    },
+    {
+      "id": "names",
+      "description": "a proper name, brand, place, or language (Jev, TypeSafe, Python, London, English)",
+      "words": "Jev JevGPT TypeSafe AI ChatGPT Claude GPT LLM OpenAI Anthropic Google Apple Microsoft Python JavaScript TypeScript Rust Java Linux Kahneman Einstein Shakespeare Newton Darwin Turing Earth Mars English Spanish French German Chinese Japanese Hindi America American Europe Asia Africa India China Japan London Paris Tokyo Berlin California Wikipedia System One San Francisco"
+    },
+    {
+      "id": "punctuation",
+      "description": "a punctuation mark (period, comma, question mark, exclamation mark, colon)",
+      "words": ". , ! ? : ; ... - 's",
+      "descriptions": {
+        ".": "period, ends a sentence",
+        ",": "comma",
+        "!": "exclamation mark, ends an excited sentence",
+        "?": "question mark, ends a question",
+        ":": "colon, introduces a list or explanation",
+        ";": "semicolon",
+        "...": "ellipsis, trailing off",
+        "-": "dash",
+        "'s": "possessive 's attached to the previous word"
+      }
+    }
+  ]
+}
