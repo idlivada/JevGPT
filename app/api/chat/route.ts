@@ -1,18 +1,11 @@
 import { backendStatus, getUserKey } from "@/lib/api-key";
 import { selectBackend, type ChatMessage } from "@/lib/backends";
-import { formatToken } from "@/lib/detokenize";
-import { DEFAULT_MAX_WORDS, DEFAULT_SETTINGS, sampleNextWord, type SamplingSettings } from "@/lib/sampling";
-import { END } from "@/lib/vocab";
-
-const MAX_MAX_WORDS = 200;
+import { generateReply, type GenerationSettings, resolveSettings } from "@/lib/generate";
 
 interface ChatRequest {
   messages?: unknown;
-  settings?: Partial<SamplingSettings & { maxWords: number }>;
+  settings?: Partial<GenerationSettings>;
 }
-
-const clamp = (x: unknown, lo: number, hi: number, fallback: number) =>
-  typeof x === "number" && Number.isFinite(x) ? Math.min(hi, Math.max(lo, x)) : fallback;
 
 function parseMessages(input: unknown): ChatMessage[] | null {
   if (!Array.isArray(input) || input.length === 0) return null;
@@ -47,14 +40,7 @@ export async function POST(req: Request) {
   if (!messages) {
     return Response.json({ error: "messages must be a non-empty list ending with a user message" }, { status: 400 });
   }
-  const s = body.settings ?? {};
-  const settings: SamplingSettings = {
-    temperature: clamp(s.temperature, 0.05, 2, DEFAULT_SETTINGS.temperature),
-    topK: Math.round(clamp(s.topK, 0, 500, DEFAULT_SETTINGS.topK)),
-    topP: clamp(s.topP, 0.05, 1, DEFAULT_SETTINGS.topP),
-    repetitionPenalty: clamp(s.repetitionPenalty, 1, 3, DEFAULT_SETTINGS.repetitionPenalty),
-  };
-  const maxWords = Math.round(clamp(s.maxWords, 1, MAX_MAX_WORDS, DEFAULT_MAX_WORDS));
+  const settings = resolveSettings(body.settings);
 
   const { backend } = selectBackend(await getUserKey());
   const abort = new AbortController();
@@ -72,31 +58,14 @@ export async function POST(req: Request) {
         }
       };
 
-      let model = backend.modelHint;
-      send("meta", { backend: backend.kind, model });
-      const reply: string[] = [];
       try {
-        let reason: "end" | "max_words" = "max_words";
-        while (reply.length < maxWords && !abort.signal.aborted) {
-          const dist = await backend.distribution({ messages, replySoFar: reply }, abort.signal);
-          if (dist.model !== model) {
-            model = dist.model;
-            send("meta", { backend: backend.kind, model });
-          }
-          const next = sampleNextWord(dist.probs, reply, settings);
-          if (next.word === END) {
-            reason = "end";
-            break;
-          }
-          send("token", {
-            word: next.word,
-            display: formatToken(reply, next.word),
-            p: next.p,
-            alternatives: next.alternatives,
-          });
-          reply.push(next.word);
+        for await (const ev of generateReply({ backend, messages, settings, signal: abort.signal })) {
+          if (ev.type === "meta") send("meta", { backend: ev.backend, model: ev.model });
+          else if (ev.type === "token") {
+            const { word, display, p, alternatives } = ev;
+            send("token", { word, display, p, alternatives });
+          } else send("done", { reason: ev.reason });
         }
-        send("done", { reason });
       } catch (err) {
         if (!abort.signal.aborted) {
           console.error("[jevgpt] generation failed", err);

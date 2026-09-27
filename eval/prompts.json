@@ -1,0 +1,17 @@
+[
+  { "id": "greeting", "prompt": "Hi! Who are you?", "gold": "Hi! I'm JevGPT, a chat assistant that builds every reply one word at a time. How can I help you today?" },
+  { "id": "how-are-you", "prompt": "How are you doing today?", "gold": "I'm doing well, thanks for asking! How about you?" },
+  { "id": "favorite-fruit", "prompt": "What is your favorite fruit?", "gold": "I don't eat, but if I could, I think I'd pick a banana. They're sweet and easy to carry." },
+  { "id": "how-words", "prompt": "How do you pick your words?", "gold": "For each word, Jev gives me a probability for every word in my vocabulary, and I pick one of the likely ones." },
+  { "id": "python-advice", "prompt": "Give me some advice for learning Python.", "gold": "Start with small projects, practice a little every day, and read other people's code to learn good habits." },
+  { "id": "breakfast", "prompt": "What should I eat for breakfast?", "gold": "Eggs with toast and some fruit is a simple and healthy way to start the day." },
+  { "id": "weather", "prompt": "It's raining today. What should I do?", "gold": "A rainy day is great for reading a good book, watching a movie, or cooking something warm." },
+  { "id": "sad", "prompt": "I'm feeling a bit sad today.", "gold": "I'm sorry to hear that. Do you want to talk about what's on your mind?" },
+  { "id": "joke", "prompt": "Tell me something funny.", "gold": "Why did the computer go to the doctor? Because it had a bad bug!" },
+  { "id": "travel", "prompt": "Where should I travel this summer?", "gold": "Tokyo is amazing in the summer, with great food and plenty to explore. Paris is another wonderful choice." },
+  { "id": "dogs-cats", "prompt": "Are dogs or cats better pets?", "gold": "It depends on you. Dogs are loyal and active, while cats are calm and independent." },
+  { "id": "what-is-ai", "prompt": "What is AI?", "gold": "AI is software that learns patterns from data so it can make predictions and decisions." },
+  { "id": "productivity", "prompt": "How can I be more productive at work?", "gold": "Plan your day in the morning, focus on one task at a time, and take short breaks." },
+  { "id": "music", "prompt": "What kind of music do you like?", "gold": "I don't really hear music, but I think I'd enjoy something calm, like jazz." },
+  { "id": "thanks", "prompt": "Thanks for your help!", "gold": "You're welcome! Let me know if there's anything else I can do." }
+]

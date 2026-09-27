@@ -17,6 +17,8 @@ export interface DistributionResult {
   probs: Distribution;
   /** Model that produced the distribution, e.g. "jev-1.13.0" or "mock-trigram". */
   model: string;
+  /** Input tokens billed for this step (Jev only). */
+  inputTokens?: number;
 }
 
 export interface NextWordBackend {

@@ -29,6 +29,20 @@ A key entered in the app takes precedence over the server's key. `JEV_BACKEND=mo
 
 If you deploy this publicly, serve it over HTTPS so the cookie gets the `Secure` flag.
 
+## Measuring coherence
+
+`npm run eval` generates replies to the prompts in `eval/prompts.json` under each named config in `eval/configs.json`. It then asks Jev to grade every reply for **fluency** (0–4), **relevance** (0–4) and whether it ends as a complete sentence. It prints a comparison table and saves the full results and a Markdown summary to `eval/results/`.
+
+To check the judge itself, it also grades each prompt's hand-written gold reply, a word-shuffled copy, and another prompt's gold reply. If Jev can't clearly separate the gold replies from those controls, the report warns that its scores aren't trustworthy.
+
+```bash
+npm run eval -- --samples 2                 # all configs; prints a max cost and asks first
+npm run eval -- --configs cold,greedy --prompts 5
+npm run eval -- --generator mock --no-judge # no API key needed
+```
+
+Add a config to `eval/configs.json` to try new sampling settings. Generation uses the same code as the app (`lib/generate.ts`).
+
 ## Other scripts
 
 - `npm test`: vitest (sampling, detokenizer, vocab limits, backend selection, key verification, backend wiring with a fake `fetch`)

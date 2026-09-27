@@ -102,6 +102,6 @@ export class TypeSafeBackend implements NextWordBackend {
       { signal },
     );
     const answers = res.answers as unknown as Record<string, ChoiceResponse>;
-    return { probs: combineAnswers(this.v, answers), model: res.model };
+    return { probs: combineAnswers(this.v, answers), model: res.model, inputTokens: res.usage?.input_tokens };
   }
 }

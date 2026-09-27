@@ -1,0 +1,6 @@
+{
+  "$comment": "Named generation configs for `npm run eval`. Each value is a partial GenerationSettings (lib/generate.ts); omitted fields use the app defaults.",
+  "default": {},
+  "cold": { "temperature": 0.3, "topK": 10 },
+  "greedy": { "topK": 1 }
+}
