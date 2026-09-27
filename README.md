@@ -25,6 +25,9 @@ JevGPT is a ChatGPT-style chat app where every word of every reply is a multiple
 
 > 🎬 **Demo video coming soon.**
 
+## Try it yourself
+Use the [live demo](https://curata.com/jevgpt) (requires TypeSafe API key) or clone this repo and run it locally.
+
 ## How it works
 
 ### The loop
