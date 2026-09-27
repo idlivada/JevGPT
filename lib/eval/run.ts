@@ -349,13 +349,32 @@ export function estimateStepTokens(): number {
 /** Input tokens per judge request (measured on jev-1.13.0: ~530), rounded up. */
 export const JUDGE_TOKENS_ESTIMATE = 650;
 
+/** Tokens for quoting a reply of up to `maxWords` words in each of the per-step questions. */
+function quoteTokens(maxWords: number): number {
+  return (vocab.groups.length + 1) * Math.ceil(maxWords * 1.5 + 60);
+}
+
+/** Tokens for one re-rank request: `k` continuations of up to `maxWords` words each, plus state. */
+function rerankTokens(k: number, maxWords: number): number {
+  return 300 + k * Math.ceil(maxWords * 1.5 + 10);
+}
+
 /** Upper bound on requests and cost, assuming every reply runs to max words. */
 export function estimateCost(plan: EvalPlan, opts: { judge: boolean; generator: "jev" | "mock" }) {
-  const replies = Object.keys(plan.configs).length * plan.prompts.length * plan.samples;
-  const maxSteps = Object.values(plan.configs).reduce((s, c) => s + c.maxWords + 1, 0) * plan.prompts.length * plan.samples;
-  const genRequests = opts.generator === "jev" ? maxSteps : 0;
+  const perConfig = plan.prompts.length * plan.samples;
+  const replies = Object.keys(plan.configs).length * perConfig;
+  let genRequests = 0;
+  let tokens = 0;
+  if (opts.generator === "jev") {
+    for (const c of Object.values(plan.configs)) {
+      const steps = (c.maxWords + 1) * perConfig;
+      const stepTokens = estimateStepTokens() + (c.quoteReply ? quoteTokens(c.maxWords) : 0);
+      genRequests += steps * (c.rerank ? 2 : 1);
+      tokens += steps * stepTokens + (c.rerank ? steps * rerankTokens(c.rerank, c.maxWords) : 0);
+    }
+  }
   const judgeRequests = opts.judge ? replies + (plan.prompts.length > 1 ? plan.prompts.length * 3 : 0) : 0;
-  const tokens = genRequests * estimateStepTokens() + judgeRequests * JUDGE_TOKENS_ESTIMATE;
+  tokens += judgeRequests * JUDGE_TOKENS_ESTIMATE;
   return { replies, genRequests, judgeRequests, tokens, cost: tokens * USD_PER_INPUT_TOKEN };
 }
 

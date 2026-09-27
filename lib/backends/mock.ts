@@ -1,7 +1,7 @@
 import { normalize } from "../sampling";
 import { END, type Vocab, vocab as defaultVocab } from "../vocab";
 import { MOCK_CORPUS } from "./corpus";
-import type { DistributionResult, NextWordBackend, NextWordContext } from "./types";
+import type { DistributionResult, NextWordBackend, NextWordContext, RerankResult } from "./types";
 
 const START = "<s>";
 /** Interpolation weights for trigram, bigram, unigram, and uniform estimates. */
@@ -111,6 +111,12 @@ export class MockBackend implements NextWordBackend {
     const [lo, hi] = this.latencyMs;
     if (hi > 0) await sleep(lo + Math.random() * (hi - lo), signal);
     return { probs: this.probabilities(ctx), model: this.modelHint };
+  }
+
+  /** The mock has no separate judge: it just renormalizes its own distribution over the candidates. */
+  async rerank(ctx: NextWordContext, candidates: string[]): Promise<RerankResult> {
+    const probs = this.probabilities(ctx);
+    return { probs: new Map(normalize(candidates.map((w) => [w, probs.get(w) ?? 0]))) };
   }
 }
 

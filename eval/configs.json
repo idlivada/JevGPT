@@ -1,6 +1,21 @@
 {
-  "$comment": "Named generation configs for `npm run eval`. Each value is a partial GenerationSettings (lib/generate.ts); omitted fields use the app defaults.",
+  "$comment": "Named generation configs for `npm run eval`. Each value is a partial GenerationSettings (lib/generate.ts); omitted fields use the app defaults. quoteReply quotes the reply so far in every Jev question; rerank: N lets Jev pick among the top N continuations each step (one extra request per word).",
   "default": {},
-  "cold": { "temperature": 0.3, "topK": 10 },
-  "greedy": { "topK": 1 }
+  "cold": {
+    "temperature": 0.3,
+    "topK": 10
+  },
+  "greedy": {
+    "topK": 1
+  },
+  "quote": {
+    "quoteReply": true
+  },
+  "rerank": {
+    "rerank": 12
+  },
+  "quote-rerank": {
+    "quoteReply": true,
+    "rerank": 12
+  }
 }

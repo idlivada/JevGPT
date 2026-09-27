@@ -1,19 +1,29 @@
 import type { ChatMessage, NextWordBackend } from "./backends/types";
 import { formatToken } from "./detokenize";
 import {
+  adjustDistribution,
   type Alternative,
   DEFAULT_MAX_WORDS,
   DEFAULT_SETTINGS,
   type Rng,
+  type SampleResult,
   type SamplingSettings,
   sampleNextWord,
 } from "./sampling";
 import { END } from "./vocab";
 
 export const MAX_MAX_WORDS = 200;
+export const MAX_RERANK_CANDIDATES = 50;
 
 export interface GenerationSettings extends SamplingSettings {
   maxWords: number;
+  /** Quote the reply so far in every Jev question (Jev backend only). */
+  quoteReply: boolean;
+  /**
+   * If ≥ 2, take this many top candidates each step and let the backend re-rank them as whole
+   * continuations (one extra request per word). 0 turns re-ranking off.
+   */
+  rerank: number;
 }
 
 const clamp = (x: unknown, lo: number, hi: number, fallback: number) =>
@@ -27,7 +37,14 @@ export function resolveSettings(s: Partial<GenerationSettings> = {}): Generation
     topP: clamp(s.topP, 0.05, 1, DEFAULT_SETTINGS.topP),
     repetitionPenalty: clamp(s.repetitionPenalty, 1, 3, DEFAULT_SETTINGS.repetitionPenalty),
     maxWords: Math.round(clamp(s.maxWords, 1, MAX_MAX_WORDS, DEFAULT_MAX_WORDS)),
+    quoteReply: s.quoteReply === true,
+    rerank: rerankCount(s.rerank),
   };
+}
+
+function rerankCount(x: unknown): number {
+  const n = Math.round(clamp(x, 0, MAX_RERANK_CANDIDATES, 0));
+  return n >= 2 ? n : 0;
 }
 
 export type GenerationEvent =
@@ -60,13 +77,27 @@ export async function* generateReply({
   let inputTokens = 0;
   while (reply.length < settings.maxWords) {
     signal?.throwIfAborted();
-    const dist = await backend.distribution({ messages, replySoFar: reply }, signal);
+    const ctx = { messages, replySoFar: reply, quoteReply: settings.quoteReply };
+    const dist = await backend.distribution(ctx, signal);
     inputTokens += dist.inputTokens ?? 0;
     if (dist.model !== model) {
       model = dist.model;
       yield { type: "meta", backend: backend.kind, model };
     }
-    const next = sampleNextWord(dist.probs, reply, settings, rng);
+    // Shortlist with the usual masks and repetition penalty, then let Jev judge whole continuations.
+    const candidates = settings.rerank
+      ? adjustDistribution(dist.probs, reply, { ...settings, temperature: 1, topK: settings.rerank, topP: 1 }).map(
+          ([w]) => w,
+        )
+      : [];
+    let next: SampleResult;
+    if (candidates.length >= 2 && backend.rerank) {
+      const reranked = await backend.rerank(ctx, candidates, signal);
+      inputTokens += reranked.inputTokens ?? 0;
+      next = sampleNextWord(reranked.probs, reply, { ...settings, topK: 0, topP: 1 }, rng);
+    } else {
+      next = sampleNextWord(dist.probs, reply, settings, rng);
+    }
     if (next.word === END) {
       yield { type: "done", reason: "end", inputTokens };
       return;
