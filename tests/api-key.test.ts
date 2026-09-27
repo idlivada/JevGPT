@@ -5,18 +5,15 @@ import { maskKey, selectBackend } from "@/lib/backends";
 afterEach(() => vi.unstubAllEnvs());
 
 describe("selectBackend", () => {
-  it("uses the mock when there is no key anywhere", () => {
+  it("has no backend until a key is entered in the UI, even with a server key", () => {
     vi.stubEnv("TYPESAFE_API_KEY", "");
-    expect(selectBackend()).toMatchObject({ keySource: null, forcedMock: false, backend: { kind: "mock" } });
+    expect(selectBackend()).toMatchObject({ backend: null, keySource: null, forcedMock: false });
+    vi.stubEnv("TYPESAFE_API_KEY", "sk-server-key-1234");
+    expect(selectBackend()).toMatchObject({ backend: null, keySource: null });
+    expect(backendStatus(undefined)).toMatchObject({ backend: null, keySource: null });
   });
 
-  it("uses the server key when set", () => {
-    vi.stubEnv("TYPESAFE_API_KEY", "sk-server-key-1234");
-    expect(selectBackend()).toMatchObject({ keySource: "env", keyHint: "sk-…1234", backend: { kind: "typesafe" } });
-  });
-
-  it("prefers a key entered in the UI over the server key", () => {
-    vi.stubEnv("TYPESAFE_API_KEY", "sk-server-key-1234");
+  it("uses a key entered in the UI", () => {
     const a = selectBackend("sk-user-key-abcd");
     expect(a).toMatchObject({ keySource: "user", keyHint: "sk-…abcd", backend: { kind: "typesafe" } });
     expect(selectBackend("sk-user-key-abcd").backend).toBe(a.backend); // cached per key

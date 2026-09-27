@@ -21,15 +21,17 @@ npm run eval -- --help                         # coherence eval (spends Jev cred
 npm run eval -- --generator mock --no-judge    # eval pipeline without a key
 ```
 
-Config comes from `.env.local` (see `.env.local.example`): `TYPESAFE_API_KEY`, `JEV_BACKEND=mock` (forces the mock), and `TYPESAFE_DEFAULT_MODEL`. The SDK also honors `TYPESAFE_BASE_URL`, which is handy for pointing at a local fake API in end-to-end tests. `npm run smoke`/`eval` load `.env.local` via `tsx --env-file-if-exists`. Variables already set in the shell take precedence.
+Config comes from `.env.local` (see `.env.local.example`): `TYPESAFE_API_KEY` (used only by the smoke/eval scripts), `JEV_BACKEND=mock` (forces the mock, so the chat runs without a key), and `TYPESAFE_DEFAULT_MODEL`. The SDK also honors `TYPESAFE_BASE_URL`, which is handy for pointing at a local fake API in end-to-end tests. `npm run smoke`/`eval` load `.env.local` via `tsx --env-file-if-exists`. Variables already set in the shell take precedence.
+
+Imports use the `@/` alias for the repo root (set in both `tsconfig.json` and `vitest.config.mts`). `.claude/launch.json` defines a `jevgpt` preview config that runs `npm run dev`.
 
 ## Architecture
 
 ### Generation pipeline
 `app/api/chat/route.ts` (POST) → `selectBackend()` → `generateReply()` → SSE events → `components/Chat.tsx` (parsed by `lib/sse.ts`).
 
-- **`lib/generate.ts`** holds the single autoregressive loop used by both the chat route and the eval. It yields `meta`, `token` and `done` events. `resolveSettings()` clamps untrusted settings from request bodies and eval configs.
-- **`lib/backends/index.ts` `selectBackend(userKey)`** picks the backend by precedence: `JEV_BACKEND=mock` → a key entered in the UI (cookie) → `TYPESAFE_API_KEY` → `MockBackend`. Backends implement `NextWordBackend` (`lib/backends/types.ts`): `distribution()`, plus optional `rerank()`.
+- **`lib/generate.ts`** holds the single autoregressive loop used by both the chat route and the eval. It yields `meta`, `token` and `done` events. `resolveSettings()` clamps untrusted settings from request bodies and eval configs (for example `maxWords` defaults to 60 with a cap of 200). `rerank` is capped at 50 and defaults to 0 (off); values below 2 also mean off. Only the UI turns re-ranking on, so the eval's `default` config and any direct API call run without it.
+- **`lib/backends/index.ts` `selectBackend(userKey)`** picks the backend: `JEV_BACKEND=mock` → `MockBackend`; otherwise a key entered in the UI (cookie); otherwise `backend: null`, and `/api/chat` returns 401 while the UI shows the key form in place of the composer. This is deliberate: the chat never falls back to the server's `TYPESAFE_API_KEY`, so public visitors can't spend the owner's credits. Backends implement `NextWordBackend` (`lib/backends/types.ts`): `distribution()`, plus optional `rerank()`.
 - **SSE contract:** `meta {backend, model}` (sent again when the real model version arrives), `token {word, display, p, alternatives, reranked}`, `done {reason}`, `error {message}`. The server sends `display`, meaning the spacing and capitalization from `lib/detokenize.ts`, so the client never re-derives it.
 
 ### How a next-word distribution is built (`lib/backends/typesafe.ts`)

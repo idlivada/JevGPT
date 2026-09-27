@@ -62,11 +62,6 @@ export default function ApiKeySection({ info, onInfo }: Props) {
           </button>
         </div>
       )}
-      {info?.keySource === "env" && (
-        <p className="text-xs text-muted">
-          Using the server&apos;s key <span className="font-mono">{info.keyHint}</span>. Add your own to override it.
-        </p>
-      )}
       {info?.keySource !== "user" && (
         <form
           className="flex gap-2"

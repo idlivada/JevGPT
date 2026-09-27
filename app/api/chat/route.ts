@@ -43,6 +43,9 @@ export async function POST(req: Request) {
   const settings = resolveSettings(body.settings);
 
   const { backend } = selectBackend(await getUserKey());
+  if (!backend) {
+    return Response.json({ error: "Enter your TypeSafe API key in Settings to start chatting." }, { status: 401 });
+  }
   const abort = new AbortController();
   req.signal.addEventListener("abort", () => abort.abort(), { once: true });
   const encoder = new TextEncoder();

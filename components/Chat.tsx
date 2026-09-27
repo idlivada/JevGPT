@@ -5,6 +5,7 @@ import type { BackendInfo, MessageStatus, TokenInfo, UiMessage, UiSettings } fro
 import { requestMessages } from "@/lib/chat-history";
 import { DEFAULT_MAX_WORDS, DEFAULT_RERANK_CANDIDATES, DEFAULT_SETTINGS } from "@/lib/defaults";
 import { readSse } from "@/lib/sse";
+import ApiKeySection from "./ApiKeySection";
 import Composer from "./Composer";
 import HistoryToggle from "./HistoryToggle";
 import MessageView from "./MessageView";
@@ -43,6 +44,7 @@ export default function Chat() {
   const [settings, setSettings] = useState<UiSettings>(DEFAULT_UI_SETTINGS);
   const [showSettings, setShowSettings] = useState(false);
   const [info, setInfo] = useState<BackendInfo | null>(null);
+  const [statusLoaded, setStatusLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -54,7 +56,8 @@ export default function Chat() {
     fetch("/api/chat")
       .then((r) => r.json())
       .then(setInfo)
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setStatusLoaded(true));
   }, []);
 
   const updateSettings = (s: UiSettings) => {
@@ -139,6 +142,17 @@ export default function Chat() {
   };
 
   const empty = messages.length === 0;
+  const needsKey = info?.backend === null;
+  // Until the status arrives, show neither the composer nor the key form, so neither flashes.
+  const input = !statusLoaded ? null : needsKey ? (
+    <div className="rounded-2xl border border-border p-4">
+      <h2 className="mb-1 font-semibold">Enter your TypeSafe API key to start chatting</h2>
+      <p className="mb-3 text-sm text-muted">JevGPT runs on your own Jev credits. A reply costs about a cent.</p>
+      <ApiKeySection info={info} onInfo={setInfo} />
+    </div>
+  ) : (
+    <Composer busy={busy} onSend={send} onStop={stop} />
+  );
   const historyToggle = (
     <HistoryToggle
       on={settings.useHistory}
@@ -163,11 +177,13 @@ export default function Chat() {
               }`}
               title={
                 info.backend === "mock"
-                  ? "No API key: using a local trigram model. Click to add a TypeSafe key."
-                  : `Using ${info.keySource === "user" ? "your" : "the server's"} TypeSafe key ${info.keyHint ?? ""}`
+                  ? "JEV_BACKEND=mock is set: using a local trigram model."
+                  : info.backend === "typesafe"
+                    ? `Using your TypeSafe key ${info.keyHint ?? ""}`
+                    : "Add your TypeSafe API key to start chatting."
               }
             >
-              {info.backend === "typesafe" ? `Jev · ${info.model}` : "Mock backend"}
+              {info.backend === "typesafe" ? `Jev · ${info.model}` : info.backend === "mock" ? "Mock backend" : "Add API key"}
             </button>
           )}
         </div>
@@ -210,19 +226,23 @@ export default function Chat() {
             probability distribution at a time.
           </p>
           <div className="w-full max-w-3xl">
-            <Composer busy={busy} onSend={send} onStop={stop} />
-            {historyToggle}
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => send(s)}
-                  className="rounded-full border border-border px-4 py-2 text-sm text-muted hover:bg-subtle hover:text-fg"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
+            {input}
+            {statusLoaded && !needsKey && (
+              <>
+                {historyToggle}
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  {SUGGESTIONS.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => send(s)}
+                      className="rounded-full border border-border px-4 py-2 text-sm text-muted hover:bg-subtle hover:text-fg"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </main>
       ) : (
@@ -242,8 +262,8 @@ export default function Chat() {
             </div>
           </div>
           <div className="mx-auto w-full max-w-3xl px-4 pb-3">
-            <Composer busy={busy} onSend={send} onStop={stop} />
-            {historyToggle}
+            {input}
+            {!needsKey && historyToggle}
             <p className="mt-1 text-center text-xs text-muted">
               Hover any word to see what else Jev considered. JevGPT only knows the words in its vocabulary.
             </p>

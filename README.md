@@ -114,14 +114,11 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. With no API key, the app uses a **mock backend**: a small trigram model trained on sample replies, so you can try the interface for free.
+Open http://localhost:3000. The chat stays locked until you enter your own TypeSafe API key, so a public deployment never spends the server owner's credits. Get a key at [console.typesafe.ai](https://console.typesafe.ai/settings/keys) and paste it into the form (or **Settings**). The server checks the key with TypeSafe, then stores it in an httpOnly, SameSite=strict cookie scoped to `/api`. Page scripts can't read it back, and the browser sends it only to this app's server, which uses it to call TypeSafe. **Remove** clears it and locks the chat again.
 
-To use Jev, get a key at [console.typesafe.ai](https://console.typesafe.ai/settings/keys), then either:
+To try the interface without a key, set `JEV_BACKEND=mock` in `.env.local` (`cp .env.local.example .env.local`) and restart. The chat then uses a **mock backend**, a small trigram model trained on sample replies, and ignores all keys. `TYPESAFE_DEFAULT_MODEL` pins a Jev version.
 
-- **Enter it in the app:** click the **Mock backend** badge (or **Settings**) and paste it. The server checks the key with TypeSafe, then stores it in an httpOnly, SameSite=strict cookie scoped to `/api`. Page scripts can't read it back, and the browser sends it only to this app's server, which uses it to call TypeSafe. **Remove** clears it.
-- **Or configure the server:** `cp .env.local.example .env.local`, set `TYPESAFE_API_KEY`, and restart. `npm run smoke` makes one real call and prints the top next words.
-
-A key entered in the app takes precedence over the server's key. `JEV_BACKEND=mock` forces the mock and ignores all keys. `TYPESAFE_DEFAULT_MODEL` pins a Jev version.
+The server's `TYPESAFE_API_KEY` is only used by the command-line scripts, never by the chat. `npm run smoke` makes one real call and prints the top next words.
 
 If you deploy this publicly, serve it over HTTPS so the cookie gets the `Secure` flag.
 

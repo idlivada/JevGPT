@@ -28,7 +28,7 @@ export async function POST(req: Request) {
   return Response.json({ ...backendStatus(apiKey), warning: check.warning });
 }
 
-/** Forget the user's key; the app falls back to the server key or the mock. */
+/** Forget the user's key, which locks the chat until another key is entered. */
 export async function DELETE() {
   (await cookies()).delete({ name: API_KEY_COOKIE, path: "/api" });
   return Response.json(backendStatus(undefined));

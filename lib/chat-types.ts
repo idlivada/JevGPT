@@ -26,10 +26,11 @@ export interface UiMessage {
 }
 
 export interface BackendInfo {
-  backend: "typesafe" | "mock";
-  model: string;
-  /** Where the active key came from: entered in the UI, the server env, or none (mock). */
-  keySource?: "user" | "env" | null;
+  /** Null until the user enters an API key: the chat is locked. */
+  backend: "typesafe" | "mock" | null;
+  model?: string;
+  /** "user" when a key was entered in the UI, otherwise null. */
+  keySource?: "user" | null;
   /** Masked key, e.g. "sk-…a1b2". */
   keyHint?: string;
   /** The server forces the mock backend (JEV_BACKEND=mock). */

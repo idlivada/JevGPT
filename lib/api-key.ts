@@ -56,8 +56,8 @@ export async function verifyApiKey(apiKey: string, fetch?: Fetch): Promise<KeyCh
 export function backendStatus(userKey: string | undefined) {
   const { backend, keySource, keyHint, forcedMock } = selectBackend(userKey);
   return {
-    backend: backend.kind,
-    model: backend.modelHint,
+    backend: backend?.kind ?? null,
+    model: backend?.modelHint,
     keySource,
     keyHint,
     forcedMock,
