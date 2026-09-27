@@ -21,7 +21,7 @@ npm run eval -- --help                         # coherence eval (spends Jev cred
 npm run eval -- --generator mock --no-judge    # eval pipeline without a key
 ```
 
-Config comes from `.env.local` (see `.env.local.example`): `TYPESAFE_API_KEY` (used only by the smoke/eval scripts), `JEV_BACKEND=mock` (forces the mock, so the chat runs without a key), and `TYPESAFE_DEFAULT_MODEL`. The SDK also honors `TYPESAFE_BASE_URL`, which is handy for pointing at a local fake API in end-to-end tests. `npm run smoke`/`eval` load `.env.local` via `tsx --env-file-if-exists`. Variables already set in the shell take precedence.
+Config comes from `.env.local` (see `.env.local.example`): `TYPESAFE_API_KEY` (used only by the smoke/eval scripts), `JEV_BACKEND=mock` (forces the mock, so the chat runs without a key), `TYPESAFE_DEFAULT_MODEL`, and `NEXT_PUBLIC_BASE_PATH` (inlined at build time, so rebuild or restart after changing it). The SDK also honors `TYPESAFE_BASE_URL`, which is handy for pointing at a local fake API in end-to-end tests. `npm run smoke`/`eval` load `.env.local` via `tsx --env-file-if-exists`. Variables already set in the shell take precedence.
 
 Imports use the `@/` alias for the repo root (set in both `tsconfig.json` and `vitest.config.mts`). `.claude/launch.json` defines a `jevgpt` preview config that runs `npm run dev`.
 
