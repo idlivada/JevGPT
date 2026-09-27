@@ -3,14 +3,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { BackendInfo, MessageStatus, TokenInfo, UiMessage, UiSettings } from "@/lib/chat-types";
 import { requestMessages } from "@/lib/chat-history";
-import { DEFAULT_MAX_WORDS, DEFAULT_SETTINGS } from "@/lib/defaults";
+import { DEFAULT_MAX_WORDS, DEFAULT_RERANK_CANDIDATES, DEFAULT_SETTINGS } from "@/lib/defaults";
 import { readSse } from "@/lib/sse";
 import Composer from "./Composer";
 import HistoryToggle from "./HistoryToggle";
 import MessageView from "./MessageView";
 import SettingsPanel from "./SettingsPanel";
 
-const DEFAULT_UI_SETTINGS: UiSettings = { ...DEFAULT_SETTINGS, maxWords: DEFAULT_MAX_WORDS, heatmap: false, useHistory: true };
+const DEFAULT_UI_SETTINGS: UiSettings = {
+  ...DEFAULT_SETTINGS,
+  maxWords: DEFAULT_MAX_WORDS,
+  heatmap: false,
+  useHistory: true,
+  rerank: true,
+};
 const SETTINGS_KEY = "jevgpt:settings";
 
 const SUGGESTIONS = [
@@ -81,7 +87,14 @@ export default function Chat() {
     const ctrl = new AbortController();
     abortRef.current = ctrl;
     const { temperature, topK, topP, repetitionPenalty, maxWords } = settings;
-    const sampling = { temperature, topK, topP, repetitionPenalty, maxWords };
+    const sampling = {
+      temperature,
+      topK,
+      topP,
+      repetitionPenalty,
+      maxWords,
+      rerank: settings.rerank ? DEFAULT_RERANK_CANDIDATES : 0,
+    };
     let finalStatus: MessageStatus = "done";
     try {
       const res = await fetch("/api/chat", {

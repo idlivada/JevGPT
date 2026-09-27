@@ -1,10 +1,11 @@
 "use client";
 
 import type { BackendInfo, UiSettings } from "@/lib/chat-types";
+import { DEFAULT_RERANK_CANDIDATES } from "@/lib/defaults";
 import ApiKeySection from "./ApiKeySection";
 
 interface SliderSpec {
-  key: Exclude<keyof UiSettings, "heatmap" | "useHistory">;
+  key: Exclude<keyof UiSettings, "heatmap" | "useHistory" | "rerank">;
   label: string;
   hint: string;
   min: number;
@@ -46,6 +47,21 @@ export default function SettingsPanel({ info, onInfo, settings, onChange, onRese
         </button>
       </div>
       <div className="space-y-4">
+        <label className="flex items-center justify-between gap-3 text-sm">
+          <span>
+            Re-rank continuations
+            <span className="block text-xs text-muted">
+              Jev picks among the top {DEFAULT_RERANK_CANDIDATES} whole continuations each step. Much more coherent,
+              about 2× slower.
+            </span>
+          </span>
+          <input
+            type="checkbox"
+            checked={settings.rerank}
+            onChange={(e) => onChange({ ...settings, rerank: e.target.checked })}
+            className="size-4 shrink-0 accent-[var(--fg)]"
+          />
+        </label>
         {SLIDERS.map((s) => (
           <label key={s.key} className="block">
             <span className="flex justify-between text-sm">

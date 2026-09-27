@@ -9,6 +9,8 @@ export interface TokenInfo {
   p: number;
   /** Jev's top choices at this step (may include "<END>"). */
   alternatives: Alternative[];
+  /** Chosen by re-ranking whole continuations; p and alternatives are the re-rank probabilities. */
+  reranked?: boolean;
 }
 
 export type MessageStatus = "streaming" | "done" | "max_words" | "stopped" | "error";
@@ -45,4 +47,6 @@ export interface UiSettings {
   heatmap: boolean;
   /** Send earlier messages as context, or only the latest one. */
   useHistory: boolean;
+  /** Let Jev choose among the top whole continuations each step (about 2x slower). */
+  rerank: boolean;
 }

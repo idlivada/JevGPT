@@ -19,5 +19,8 @@ export const DEFAULT_SETTINGS: SamplingSettings = {
 /** Default cap on reply length, in words. */
 export const DEFAULT_MAX_WORDS = 60;
 
+/** Shortlist size when re-ranking is on: the size that won the coherence eval. */
+export const DEFAULT_RERANK_CANDIDATES = 12;
+
 /** How many recent messages Jev sees when chat history is on. */
 export const MAX_HISTORY_MESSAGES = 8;

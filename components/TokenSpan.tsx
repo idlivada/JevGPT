@@ -26,7 +26,9 @@ export default function TokenSpan({ token, heatmap }: { token: TokenInfo; heatma
           role="tooltip"
           className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1.5 hidden w-48 -translate-x-1/2 rounded-lg border border-border bg-popover p-2 text-xs shadow-lg group-hover:block group-focus:block"
         >
-          <span className="mb-1 block text-[11px] text-muted">Jev&apos;s top picks</span>
+          <span className="mb-1 block text-[11px] text-muted">
+            {token.reranked ? "Jev's re-ranked picks" : "Jev's top picks"}
+          </span>
           {token.alternatives.map((alt) => (
             <span
               key={alt.word}

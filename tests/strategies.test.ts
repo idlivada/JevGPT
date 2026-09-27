@@ -116,6 +116,15 @@ describe("re-ranking", () => {
     expect(shortlists.every((c) => c.length >= 2 && c.length <= 5)).toBe(true);
     expect(tokens.every((t) => shortlists.some((c) => c.includes(t.word)))).toBe(true);
     expect(await run()).toEqual(events); // still deterministic with a seed
+    expect(tokens.every((t) => t.type === "token" && t.reranked)).toBe(true);
+  });
+
+  it("marks tokens as not re-ranked when the setting is off", async () => {
+    const mock = new MockBackend(vocab, MOCK_CORPUS, [0, 0]);
+    const settings = resolveSettings({ maxWords: 4 });
+    for await (const e of generateReply({ backend: mock, messages: ctx([]).messages, settings, rng: seededRng(1) })) {
+      if (e.type === "token") expect(e.reranked).toBe(false);
+    }
   });
 });
 

@@ -49,7 +49,15 @@ function rerankCount(x: unknown): number {
 
 export type GenerationEvent =
   | { type: "meta"; backend: NextWordBackend["kind"]; model: string }
-  | { type: "token"; word: string; display: string; p: number; alternatives: Alternative[] }
+  | {
+      type: "token";
+      word: string;
+      display: string;
+      p: number;
+      alternatives: Alternative[];
+      /** p and alternatives come from Jev's re-ranking of whole continuations. */
+      reranked: boolean;
+    }
   | { type: "done"; reason: "end" | "max_words"; inputTokens: number };
 
 export interface GenerateOptions {
@@ -91,10 +99,11 @@ export async function* generateReply({
         )
       : [];
     let next: SampleResult;
-    if (candidates.length >= 2 && backend.rerank) {
-      const reranked = await backend.rerank(ctx, candidates, signal);
-      inputTokens += reranked.inputTokens ?? 0;
-      next = sampleNextWord(reranked.probs, reply, { ...settings, topK: 0, topP: 1 }, rng);
+    const reranked = candidates.length >= 2 && backend.rerank !== undefined;
+    if (reranked) {
+      const judged = await backend.rerank!(ctx, candidates, signal);
+      inputTokens += judged.inputTokens ?? 0;
+      next = sampleNextWord(judged.probs, reply, { ...settings, topK: 0, topP: 1 }, rng);
     } else {
       next = sampleNextWord(dist.probs, reply, settings, rng);
     }
@@ -108,6 +117,7 @@ export async function* generateReply({
       display: formatToken(reply, next.word),
       p: next.p,
       alternatives: next.alternatives,
+      reranked,
     };
     reply.push(next.word);
   }

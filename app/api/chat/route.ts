@@ -25,7 +25,7 @@ export async function GET() {
 /**
  * Generate a reply one word at a time, streamed as server-sent events:
  *   meta  {backend, model}           – which model is answering
- *   token {word, display, p, alternatives}
+ *   token {word, display, p, alternatives, reranked}
  *   done  {reason: "end" | "max_words"}
  *   error {message}
  */
@@ -62,8 +62,8 @@ export async function POST(req: Request) {
         for await (const ev of generateReply({ backend, messages, settings, signal: abort.signal })) {
           if (ev.type === "meta") send("meta", { backend: ev.backend, model: ev.model });
           else if (ev.type === "token") {
-            const { word, display, p, alternatives } = ev;
-            send("token", { word, display, p, alternatives });
+            const { word, display, p, alternatives, reranked } = ev;
+            send("token", { word, display, p, alternatives, reranked });
           } else send("done", { reason: ev.reason });
         }
       } catch (err) {
