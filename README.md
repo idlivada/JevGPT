@@ -2,11 +2,13 @@
 
 *Autoregressive text, written by a model that doesn't write.*
 
-For years we've pointed billion-parameter autoregressive transformers at problems that are really multiple choice. Is this email spam? Generate a few hundred tokens of step-by-step reasoning, then fish a "yes" out of the last line. Which team should handle this ticket? Warm up a GPU cluster, stream out a JSON object, and hope it parses. We've been hiring a novelist to tick checkboxes, and paying by the word.
+For years we've inappropriately pointed billion-parameter autoregressive transformers meant to write sequences of words at problems that are really multiple choice. 
 
-It's time to return the favor.
+Is this email spam? What tool should be used? Generate a few hundred tokens of step-by-step reasoning, then fish a "yes" out of the last line.
 
-[Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), from TypeSafe AI, is a *System One* model built to make choices. Give it a situation and a list of options, and it returns a calibrated probability for each one in milliseconds, for a fraction of a cent. It doesn't write. It has no interest in writing.
+It's time to return the favor, by using a model meant to make choices, to write sequences of words.
+
+[Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), from TypeSafe AI, is a *System One* model built to make choices. Give it a situation and a list of options, and it returns a calibrated probability for each one in milliseconds, for a fraction of a cent. 
 
 So naturally, we made it write.
 
