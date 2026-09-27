@@ -75,7 +75,7 @@ export default function ApiKeySection({ info, onInfo }: Props) {
             type="password"
             value={key}
             onChange={(e) => setKey(e.target.value)}
-            placeholder="sk-…"
+            placeholder="apikey_…"
             aria-label="TypeSafe API key"
             autoComplete="off"
             spellCheck={false}

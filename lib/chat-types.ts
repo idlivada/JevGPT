@@ -31,7 +31,7 @@ export interface BackendInfo {
   model?: string;
   /** "user" when a key was entered in the UI, otherwise null. */
   keySource?: "user" | null;
-  /** Masked key, e.g. "sk-…a1b2". */
+  /** Masked key, e.g. "api…a1b2". */
   keyHint?: string;
   /** The server forces the mock backend (JEV_BACKEND=mock). */
   forcedMock?: boolean;

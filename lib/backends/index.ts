@@ -10,7 +10,7 @@ export interface BackendSelection {
   /** Null when no key has been entered in the UI, so the chat must not run. */
   backend: NextWordBackend | null;
   keySource: KeySource;
-  /** Masked key for display, e.g. "sk-…a1b2". Never the full key. */
+  /** Masked key for display, e.g. "api…a1b2". Never the full key. */
   keyHint?: string;
   /** JEV_BACKEND=mock is set, so keys are ignored. */
   forcedMock: boolean;
