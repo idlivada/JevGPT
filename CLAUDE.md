@@ -68,6 +68,7 @@ An interpolated trigram model trained on `lib/backends/corpus.ts`, with a boost 
 
 ### Client/server boundaries
 - Client components must only import client-safe modules: `lib/defaults.ts`, `lib/chat-types.ts`, `lib/sse.ts`, `lib/chat-history.ts`. Importing `lib/vocab.ts` or `lib/sampling.ts` would bundle `vocab.json` into the browser.
+- The app can be served under a sub-path (`NEXT_PUBLIC_BASE_PATH`, e.g. `/jevgpt`, which also sets Next's `basePath`). Next prefixes links and assets, but not `fetch()` URLs or cookie paths, so client fetches must use `${BASE_PATH}/api/...` from `lib/defaults.ts`, and the key cookie uses `API_KEY_COOKIE_PATH`.
 - Next.js route files may only export route handlers and route config. Shared constants live in `lib/`.
 - UI settings persist in `localStorage` (`jevgpt:settings`), merged over `DEFAULT_UI_SETTINGS` in `Chat.tsx`, so new settings pick up their defaults automatically. The "Chat history" toggle decides client-side which messages are sent (`lib/chat-history.ts`). The Jev backend keeps only the last `MAX_HISTORY_MESSAGES` (8).
 

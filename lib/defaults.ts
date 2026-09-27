@@ -24,3 +24,9 @@ export const DEFAULT_RERANK_CANDIDATES = 12;
 
 /** How many recent messages Jev sees when chat history is on. */
 export const MAX_HISTORY_MESSAGES = 8;
+
+/**
+ * URL prefix when the app is served under a sub-path, e.g. "/jevgpt" (NEXT_PUBLIC_BASE_PATH, also
+ * the Next.js basePath). fetch() and cookie paths don't get the prefix automatically, so add it.
+ */
+export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";

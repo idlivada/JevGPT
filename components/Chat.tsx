@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { BackendInfo, MessageStatus, TokenInfo, UiMessage, UiSettings } from "@/lib/chat-types";
 import { requestMessages } from "@/lib/chat-history";
-import { DEFAULT_MAX_WORDS, DEFAULT_RERANK_CANDIDATES, DEFAULT_SETTINGS } from "@/lib/defaults";
+import { BASE_PATH, DEFAULT_MAX_WORDS, DEFAULT_RERANK_CANDIDATES, DEFAULT_SETTINGS } from "@/lib/defaults";
 import { readSse } from "@/lib/sse";
 import ApiKeySection from "./ApiKeySection";
 import Composer from "./Composer";
@@ -53,7 +53,7 @@ export default function Chat() {
   useEffect(() => {
     // localStorage is only readable after hydration.
     setSettings(loadSettings());
-    fetch("/api/chat")
+    fetch(`${BASE_PATH}/api/chat`)
       .then((r) => r.json())
       .then(setInfo)
       .catch(() => {})
@@ -100,7 +100,7 @@ export default function Chat() {
     };
     let finalStatus: MessageStatus = "done";
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch(`${BASE_PATH}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: history, settings: sampling }),

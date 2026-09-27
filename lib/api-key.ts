@@ -9,10 +9,13 @@ import {
 } from "@typesafe-ai/sdk";
 import { cookies } from "next/headers";
 import { selectBackend } from "./backends";
+import { BASE_PATH } from "./defaults";
 import { vocab } from "./vocab";
 
 /** httpOnly cookie holding a key the user entered in the UI. Page scripts can't read it. */
 export const API_KEY_COOKIE = "jevgpt_api_key";
+/** The browser sends the cookie only to the API routes. */
+export const API_KEY_COOKIE_PATH = `${BASE_PATH}/api`;
 
 export async function getUserKey(): Promise<string | undefined> {
   return (await cookies()).get(API_KEY_COOKIE)?.value || undefined;

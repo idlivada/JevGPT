@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { BackendInfo } from "@/lib/chat-types";
+import { BASE_PATH } from "@/lib/defaults";
 
 interface Props {
   info: BackendInfo | null;
@@ -19,7 +20,7 @@ export default function ApiKeySection({ info, onInfo }: Props) {
     setError(null);
     setNotice(null);
     try {
-      const res = await fetch("/api/key", {
+      const res = await fetch(`${BASE_PATH}/api/key`, {
         method,
         headers: body ? { "Content-Type": "application/json" } : undefined,
         body: body ? JSON.stringify(body) : undefined,

@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { API_KEY_COOKIE, backendStatus, checkKeyFormat, verifyApiKey } from "@/lib/api-key";
+import { API_KEY_COOKIE, API_KEY_COOKIE_PATH, backendStatus, checkKeyFormat, verifyApiKey } from "@/lib/api-key";
 
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     httpOnly: true,
     sameSite: "strict",
     secure: new URL(req.url).protocol === "https:",
-    path: "/api",
+    path: API_KEY_COOKIE_PATH,
     maxAge: THIRTY_DAYS,
   });
   return Response.json({ ...backendStatus(apiKey), warning: check.warning });
@@ -30,6 +30,6 @@ export async function POST(req: Request) {
 
 /** Forget the user's key, which locks the chat until another key is entered. */
 export async function DELETE() {
-  (await cookies()).delete({ name: API_KEY_COOKIE, path: "/api" });
+  (await cookies()).delete({ name: API_KEY_COOKIE, path: API_KEY_COOKIE_PATH });
   return Response.json(backendStatus(undefined));
 }
