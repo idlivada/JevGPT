@@ -240,6 +240,15 @@ export default function Chat() {
           </p>
           <div className="w-full max-w-3xl">
             {input}
+            {needsKey && (
+              <p className="mt-4 text-center text-sm text-muted">
+                No key yet? Watch the demo video and read how JevGPT works{" "}
+                <a href={REPO_URL} target="_blank" rel="noreferrer" className="underline hover:text-fg">
+                  on GitHub
+                </a>
+                .
+              </p>
+            )}
             {statusLoaded && !needsKey && (
               <>
                 {historyToggle}
