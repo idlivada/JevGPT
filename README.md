@@ -1,3 +1,7 @@
+
+
+
+
 # JevGPT
 
 *Autoregressive text, written by a model that doesn't write.*
@@ -23,7 +27,7 @@ JevGPT is a ChatGPT-style chat app where every word of every reply is a multiple
   inline video player. Then delete this comment and the placeholder line below.
 -->
 
-> 🎬 **Demo video coming soon.**
+https://github.com/user-attachments/assets/59c63de4-ea2a-4d66-bb7d-8759d7702403
 
 ## Try it yourself
 Use the [live demo](https://curata.com/jevgpt) (requires TypeSafe API key) or clone this repo and run it locally.
